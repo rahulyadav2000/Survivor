@@ -31,4 +31,9 @@ public class HealthSystem : MonoBehaviour
     {
         
     }
+
+    public void TakeDamage(float damage)
+    {
+        Health -= damage;
+    }
 }

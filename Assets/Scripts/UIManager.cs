@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UIManager : MonoBehaviour
     public HungerSystem hungerSystem;
     public HealthSystem healthSystem;
     public InventoryUI inventoryUI;
+    public Image EnemyHealth;
     void Start()
     {
         
@@ -20,5 +22,24 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("Terrain");
+    }
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("Terrain");
+    }
+
+    public void Home()
+    {
+        SceneManager.LoadScene("StartScene");
     }
 }

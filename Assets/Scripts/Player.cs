@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     private InventoryObject inventory;
@@ -17,6 +18,10 @@ public class Player : MonoBehaviour
     public GameObject inventoryUI;
     public GameObject sidepanel;
     public UIManager UIManager;
+    public PlayerAttack attack;
+    public GameObject hand;
+    public GameObject foot;
+    private float time;
 
     // Start is called before the first frame update
     void Awake()
@@ -25,7 +30,6 @@ public class Player : MonoBehaviour
         charactercontroller = GetComponent<CharacterController>();
         healthSystem = GetComponent<HealthSystem>();
         hungerSystem = GetComponent<HungerSystem>();
-        // hungerSystem.SetHealthSystem(healthSystem);
         inventory = GetComponent<InventoryObject>();
     }
     public void Consume(Item item)
@@ -61,6 +65,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        time += Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.B))
         {
             inventoryUI.SetActive(!inventoryUI.activeSelf);
@@ -73,13 +78,35 @@ public class Player : MonoBehaviour
         hungerbar.fillAmount = hungerSystem.HungerLevel/100;
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
-           
+            speed *= 1.5f;
             ani.SetBool("canRun", true);
         }
         if(Input.GetKeyUp(KeyCode.LeftShift))
         {
+            speed /= 1.5f;
             ani.SetBool("canRun", false);
         }
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            attack = GetComponent<PlayerAttack>();
+            ani.SetBool("Punch", true);
+            hand.GetComponent<SphereCollider>().enabled = true;
+        }
+        else
+        {
+            ani.SetBool("Punch", false);
+            hand.GetComponent<SphereCollider>().enabled = false;
+        }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            attack = GetComponent<PlayerAttack>();
+            ani.SetBool("SpecialPunch", true);
+            foot.GetComponent<SphereCollider>().enabled = true;
+            Invoke("OnSpecialPunchCompleted", 2.633f);
+        }
+      
 
         if(charactercontroller.isGrounded)
         {
@@ -88,7 +115,8 @@ public class Player : MonoBehaviour
             moveDirection *= speed;
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                moveDirection.y = jumpspeed;
+                Invoke("jump", 1f);
+              
                 ani.SetBool("Jump", true);
             }
            
@@ -105,7 +133,27 @@ public class Player : MonoBehaviour
         ani.SetFloat("Speed", magnitude);
 
         // transform.Rotate(0, Input.GetAxis("Horizontal") *)
+        if (healthSystem.Health == 0 && time >3.56f)
+        {
+            ani.SetBool("IsDead", true);
+            SceneManager.LoadScene("EndScene");
+        }
+        else
+        {
+            ani.SetBool("IsDead", false);
+        }
        
+    }
+
+    private void OnSpecialPunchCompleted()
+    {
+        ani.SetBool("SpecialPunch", false);
+        foot.GetComponent<SphereCollider>().enabled = false;
+    }
+
+    void jump()
+    {
+        moveDirection.y = jumpspeed;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -131,15 +179,6 @@ public class Player : MonoBehaviour
 
     }
 
-   /* public void OnTriggerEnter(Collider other)
-    {
-        var item = other.GetComponent<Item>();
-        if(item)
-        {
-            
-            inventory.AddItem(item.item, 1);
-            Destroy(other.gameObject);
-        }
-    }*/
+    
 }
 
