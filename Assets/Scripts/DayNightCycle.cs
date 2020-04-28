@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class DayNightCycle : MonoBehaviour
 {
-    public float DayCounter;
+    public float DayCounter = 1;
 
     public float DayTimeLength;
     public float NightTimeLength;
@@ -14,6 +15,7 @@ public class DayNightCycle : MonoBehaviour
 
     private bool EndOfday;
     private bool Nextday;
+    public Text DayText;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +25,12 @@ public class DayNightCycle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(transform.eulerAngles.x>0 && transform.eulerAngles.x<180)
+        if (DayCounter == 2)
+        {
+            SceneManager.LoadScene("Victory");
+        }
+
+        if (transform.eulerAngles.x>0 && transform.eulerAngles.x<180)
         {
             IsNightTime = false;
             IsDayTime = true;
@@ -42,6 +49,10 @@ public class DayNightCycle : MonoBehaviour
             transform.Rotate(1 * NightTimeLength * Time.deltaTime, 0, 0);
 
         IncreaseNumberOfDays();
+
+        DayText.text = DayCounter.ToString();
+
+        
     }
 
     void IncreaseNumberOfDays()

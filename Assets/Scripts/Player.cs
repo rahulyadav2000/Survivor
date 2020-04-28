@@ -71,11 +71,12 @@ public class Player : MonoBehaviour
             inventoryUI.SetActive(!inventoryUI.activeSelf);
             sidepanel.SetActive(!sidepanel.activeSelf);
             inventoryUI.GetComponent<InventoryUI>().Refresh();
+        }
 
-                }
         healthSystem.Health= hungerSystem.UpdateHungerLevel(healthSystem.Health);
         healthbar.fillAmount = healthSystem.Health/100;
         hungerbar.fillAmount = hungerSystem.HungerLevel/100;
+
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
             speed *= 1.5f;
@@ -87,7 +88,7 @@ public class Player : MonoBehaviour
             ani.SetBool("canRun", false);
         }
 
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetKeyDown(KeyCode.V))
         {
             attack = GetComponent<PlayerAttack>();
             ani.SetBool("Punch", true);
@@ -115,7 +116,7 @@ public class Player : MonoBehaviour
             moveDirection *= speed;
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Invoke("jump", 1f);
+                Invoke("Jump", 1f);
               
                 ani.SetBool("Jump", true);
             }
@@ -132,7 +133,6 @@ public class Player : MonoBehaviour
         var magnitude = new Vector2(charactercontroller.velocity.x, charactercontroller.velocity.z).magnitude;
         ani.SetFloat("Speed", magnitude);
 
-        // transform.Rotate(0, Input.GetAxis("Horizontal") *)
         if (healthSystem.Health == 0 && time >3.56f)
         {
             ani.SetBool("IsDead", true);
@@ -174,7 +174,6 @@ public class Player : MonoBehaviour
         {
           
             healthSystem.decreaseHealth(obs.Health);
-            Destroy(hit.gameObject);
         }
 
     }

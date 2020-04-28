@@ -36,7 +36,7 @@ public class Enemy2 : MonoBehaviour
             if (!isStood)
             {
                 isStood = true;
-                anim.SetBool("isStanding", true);
+                anim.SetBool("IsStanding", true);
                 EnemyH.gameObject.SetActive(true);
             }
             Invoke("OnStandUp", 5F);
@@ -55,7 +55,7 @@ public class Enemy2 : MonoBehaviour
             {
                 EnemyHealth.fillAmount = enemyhealth.health / 100;
                 isWalking = true;
-                anim.SetBool("isWalking", true);
+                anim.SetBool("IsWalking", true);
                 navAgent.SetDestination(Destination.position);
                 anim.SetBool("IsHitting", false);
                 hand.GetComponent<SphereCollider>().enabled = false;

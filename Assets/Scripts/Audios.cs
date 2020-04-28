@@ -15,7 +15,7 @@ public class Audios : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             ani.SetBool("Punch", true);
             Source.Play();
